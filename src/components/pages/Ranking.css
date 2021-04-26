@@ -1,0 +1,20 @@
+.ranking-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.searchDiv {
+  display: flex;
+  background-color: #dedede;
+  padding: 5px;
+  justify-content: left;
+  flex-direction: row;
+}
+
+.ag-theme-alpine {
+  width: 90%;
+  height: 55vh;
+}
