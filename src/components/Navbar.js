@@ -77,7 +77,7 @@ const Navbar = () => {
             </li>
           </ul>
           {button && (
-            <Button buttonStyle="btn--outline" linkPage="/sign-up">
+            <Button buttonStyle="button--outline" linkPage="/sign-up">
               SIGN UP
             </Button>
           )}

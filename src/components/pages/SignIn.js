@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import UserContext, { createContext } from "../context/UserContext";
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -48,6 +50,34 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const [email, setEmail] = useState("");
+  const [passWord, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isSending, setIsSending] = useState(false);
+  const history = useHistory();
+
+  // const { setUserData } = useContext(UserContext);
+
+  const submit = async (e) => {
+    setIsSending(true);
+    console.log(`Current email: ${email}\nCurrent Password: ${passWord}`);
+    e.preventDefault();
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: `${email}`, password: `${passWord}` }),
+    };
+    await fetch("http://131.181.190.87:3000/user/login", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+      })
+      .then(() => history.push("/home"))
+      .catch((err) => {
+        setError(err.message);
+        console.log(`There was an error ${error}`);
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -69,7 +99,7 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
+            onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
             variant="outlined"
@@ -81,6 +111,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(event) => setPassword(event.target.value)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -92,15 +123,11 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={submit}
           >
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
                 {"Don't have an account? Sign Up"}

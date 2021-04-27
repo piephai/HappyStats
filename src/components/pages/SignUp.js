@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -12,7 +10,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import UserContext from "../context/UserContext";
 import { useHistory } from "react-router-dom";
 
 /*Next thing to do is to call this with several different APIs. Should be the same request with login and registration*/
@@ -59,9 +56,9 @@ export default function SignUp() {
   const history = useHistory();
 
   const submit = async (e) => {
+    setIsSending(true);
     console.log(`Current email: ${email}\nCurrent Password: ${passWord}`);
     e.preventDefault();
-    setIsSending(true);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,7 +67,7 @@ export default function SignUp() {
     await fetch("http://131.181.190.87:3000/user/register", requestOptions)
       .then((response) => response.json())
       .then((data) => console.log(data))
-      .then(() => history.push("/ranking"))
+      .then(() => history.push("/sign-in"))
       .catch((err) => {
         setError(err.message);
         console.log(`There was an error ${error}`);
@@ -98,7 +95,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -111,7 +108,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </Grid>
           </Grid>

@@ -35,8 +35,6 @@ const Ranking = () => {
   //     setNumCountries(setNumCountries(gridOptions.api.getDisplayedRowCount()));
   //   };
 
-  const getCountries = () => {};
-
   useEffect(() => {
     fetch("http://131.181.190.87:3000/rankings")
       .then((res) => res.json())
