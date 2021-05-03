@@ -23,17 +23,12 @@ const Ranking = () => {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
     setNumCountries(params.api.getDisplayedRowCount());
-    // console.log("Number of row counts: " + params.api.getDisplayedRowCount());
   }
 
   const onFilterTextChange = (e) => {
     gridApi.setQuickFilter(e.target.value);
     setNumCountries(gridApi.getDisplayedRowCount());
   };
-
-  //   const getNumCountries = () => {
-  //     setNumCountries(setNumCountries(gridOptions.api.getDisplayedRowCount()));
-  //   };
 
   useEffect(() => {
     fetch("http://131.181.190.87:3000/rankings")
@@ -72,8 +67,8 @@ const Ranking = () => {
           defaultColDef={{ flex: 1 }}
           rowData={rowData}
           className="ranking-grid"
-          pagination={true}
-          paginationPageSize={10}
+          // pagination={true}
+          // paginationPageSize={10}
         />
         <p>
           There is <Badge color="success"> {numCountries}</Badge> rows

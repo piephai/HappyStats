@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import UserContext, { createContext } from "../context/UserContext";
+import { UserContext } from "../context/UserContext";
 import { useHistory } from "react-router-dom";
 
 function Copyright() {
@@ -54,9 +54,8 @@ export default function SignIn() {
   const [passWord, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const { user, setUser } = useContext(UserContext);
   const history = useHistory();
-
-  // const { setUserData } = useContext(UserContext);
 
   const submit = async (e) => {
     setIsSending(true);
@@ -70,7 +69,7 @@ export default function SignIn() {
     await fetch("http://131.181.190.87:3000/user/login", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        localStorage.setItem("token", data.token);
+        setUser(data);
       })
       .then(() => history.push("/home"))
       .catch((err) => {
