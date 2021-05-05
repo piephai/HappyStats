@@ -14,19 +14,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { UserContext } from "../context/UserContext";
 import { useHistory } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Happy Statistics
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,7 +49,23 @@ export default function SignIn() {
   const [isSending, setIsSending] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
+  const [errorOpen, setErrorOpen] = useState(false);
 
+  const handleErrors = (response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response;
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorOpen(false);
+  };
+
+  //Handle submit requests
   const submit = async (e) => {
     setIsSending(true);
     console.log(`Current email: ${email}\nCurrent Password: ${passWord}`);
@@ -67,14 +76,24 @@ export default function SignIn() {
       body: JSON.stringify({ email: `${email}`, password: `${passWord}` }),
     };
     await fetch("http://131.181.190.87:3000/user/login", requestOptions)
+      .then(handleErrors)
       .then((response) => response.json())
       .then((data) => {
         setUser(data);
       })
       .then(() => history.push("/home"))
       .catch((err) => {
-        setError(err.message);
-        console.log(`There was an error ${error}`);
+        if (err.message === "401") {
+          setErrorOpen(true);
+          setError(`Incorrect email or password`);
+          setIsSending(false);
+        } else {
+          setErrorOpen(true);
+          setError(
+            `Request body incomplete, both email and password are required`
+          );
+          setIsSending(false);
+        }
       });
   };
 
@@ -122,6 +141,7 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={isSending}
             onClick={submit}
           >
             Sign In
@@ -136,7 +156,15 @@ export default function SignIn() {
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Snackbar
+          open={errorOpen}
+          autoHideDuration={5000}
+          onClose={handleSnackClose}
+        >
+          <Alert onClose={handleSnackClose} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );

@@ -11,21 +11,14 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 /*Next thing to do is to call this with several different APIs. Should be the same request with login and registration*/
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Happy Statistics
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,7 +47,23 @@ export default function SignUp() {
   const [error, setError] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const history = useHistory();
+  const [errorOpen, setErrorOpen] = useState(false);
 
+  const handleErrors = (response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
+    return response;
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setErrorOpen(false);
+  };
+
+  //Handle submit requests
   const submit = async (e) => {
     setIsSending(true);
     console.log(`Current email: ${email}\nCurrent Password: ${passWord}`);
@@ -65,12 +74,22 @@ export default function SignUp() {
       body: JSON.stringify({ email: `${email}`, password: `${passWord}` }),
     };
     await fetch("http://131.181.190.87:3000/user/register", requestOptions)
+      .then(handleErrors)
       .then((response) => response.json())
       .then((data) => console.log(data))
       .then(() => history.push("/sign-in"))
       .catch((err) => {
-        setError(err.message);
-        console.log(`There was an error ${error}`);
+        if (err.message === "409") {
+          setErrorOpen(true);
+          setError(`User already exists`);
+          setIsSending(false);
+        } else {
+          setErrorOpen(true);
+          setError(
+            `Request body incomplete, both email and password are required`
+          );
+          setIsSending(false);
+        }
       });
   };
 
@@ -132,8 +151,16 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
+      <Box mt={8}>
+        <Snackbar
+          open={errorOpen}
+          autoHideDuration={5000}
+          onClose={handleSnackClose}
+        >
+          <Alert onClose={handleSnackClose} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
       </Box>
     </Container>
   );
