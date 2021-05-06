@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -16,12 +14,22 @@ import { UserContext } from "../context/UserContext";
 import { useHistory } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Paper from "@material-ui/core/paper";
+import FlowerImage from "../../images/flower-image.jpg";
 
 const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    backgroundImage: `url(${FlowerImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    height: "90vh",
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
@@ -39,9 +47,24 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  textDesign: {
+    color: "white",
+  },
+  floatingLabel: {
+    backgroundColor: "white",
+    color: "white",
+    border: "1px solid #ced4da",
+    borderRadius: 4,
+  },
+
+  dontHaveAnAccount: {
+    color: "white",
+    marginTop: "2vh",
+    size: "4rem",
+  },
 }));
 
-export default function SignIn() {
+const SignIn = () => {
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [passWord, setPassword] = useState("");
@@ -81,7 +104,7 @@ export default function SignIn() {
       .then((data) => {
         setUser(data);
       })
-      .then(() => history.push("/home"))
+      .then(() => history.goBack())
       .catch((err) => {
         if (err.message === "401") {
           setErrorOpen(true);
@@ -98,74 +121,85 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            disabled={isSending}
-            onClick={submit}
+    <Paper className={classes.container}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h5"
+            className={classes.textDesign}
           >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href="/sign-up" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+            Sign in
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              className={classes.floatingLabel}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              className={classes.floatingLabel}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={isSending}
+              onClick={submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item>
+                <Link
+                  href="/sign-up"
+                  variant="body2"
+                  className={classes.dontHaveAnAccount}
+                  fontWeight="boulder"
+                >
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Snackbar
-          open={errorOpen}
-          autoHideDuration={5000}
-          onClose={handleSnackClose}
-        >
-          <Alert onClose={handleSnackClose} severity="error">
-            {error}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <Box mt={8}>
+          <Snackbar
+            open={errorOpen}
+            autoHideDuration={5000}
+            onClose={handleSnackClose}
+          >
+            <Alert onClose={handleSnackClose} severity="error">
+              {error}
+            </Alert>
+          </Snackbar>
+        </Box>
+      </Container>
+    </Paper>
   );
-}
+};
+
+export default SignIn;

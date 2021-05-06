@@ -49,7 +49,7 @@ const Ranking = () => {
   return (
     <div className="ranking-container">
       <div className="ranking-title">
-        <h1>Happiness ranking by country </h1>
+        <h1 font="">Happiness ranking by country </h1>
 
         <div className="searchDiv">
           <input

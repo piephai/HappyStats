@@ -1,14 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import "./Navbar.css";
+import { UserContext } from "../components/context/UserContext";
+
 const Navbar = () => {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
+  const { user, setUser } = useContext(UserContext);
+  const [buttonText, setButtonText] = useState("SIGN UP");
+  const [linkToPage, setLinkToPage] = useState("/sign-up");
 
   //Change the state of click to the opposite of what it is currently
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
+
+  const handleSignOut = () => {
+    if (user) {
+      setClick(false);
+      setUser(null);
+    }
+    setClick(false);
+  };
+
+  const buttonOption = () => {
+    if (user) {
+      setButtonText("SIGN OUT");
+      setLinkToPage("/home");
+    } else {
+      setButtonText("SIGN UP");
+      setLinkToPage("/sign-up");
+    }
+  };
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -21,6 +44,11 @@ const Navbar = () => {
   useEffect(() => {
     showButton();
   }, []);
+
+  useEffect(() => {
+    buttonOption();
+  }, [user]);
+
   window.addEventListener("resize", showButton);
 
   return (
@@ -68,17 +96,22 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link
-                to="/sign-up"
+                to={linkToPage}
                 className="nav-links-mobile"
-                onClick={closeMobileMenu}
+                onClick={handleSignOut}
               >
-                Sign Up
+                {buttonText}
               </Link>
             </li>
           </ul>
+          {/* Only display the below button if screen size is greater than a certain amount */}
           {button && (
-            <Button buttonStyle="button--outline" linkPage="/sign-up">
-              SIGN UP
+            <Button
+              buttonStyle="btnn--outline"
+              linkPage={linkToPage}
+              onClick={handleSignOut}
+            >
+              {buttonText}
             </Button>
           )}
         </div>

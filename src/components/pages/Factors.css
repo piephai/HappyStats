@@ -1,0 +1,47 @@
+.no-data-content {
+  display: flex;
+  flex-direction: column;
+  float: left;
+  padding-top: 5vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.factors-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 1vh;
+}
+
+.no-data-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 1vh;
+}
+
+.no-data-container h3 {
+  margin: 2vh;
+}
+
+.sign-in-btn {
+  padding: 5vh;
+}
+
+.sign-in-btn button {
+  width: 20vh;
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+
+.sign-in-btn button:hover {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
