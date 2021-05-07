@@ -5,7 +5,9 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Badge } from "reactstrap";
+import Typography from "@material-ui/core/Typography";
 import "./Ranking.css";
+import TextField from "@material-ui/core/TextField";
 
 const Ranking = () => {
   const [numCountries, setNumCountries] = useState(null);
@@ -49,16 +51,25 @@ const Ranking = () => {
   return (
     <div className="ranking-container">
       <div className="ranking-title">
-        <h1 font="">Happiness ranking by country </h1>
-
-        <div className="searchDiv">
-          <input
-            className="searchBox"
-            type="search"
-            placeholder=" search something..."
-            onChange={onFilterTextChange}
-          />
-        </div>
+        <Typography
+          component="h1"
+          variant="h2"
+          align="center"
+          color="textPrimary"
+          gutterBottom
+          padding-top="2px"
+        >
+          World Happiness Ranking
+        </Typography>
+      </div>
+      <div className="search-div">
+        <TextField
+          id="outlined-basic"
+          label="Search something..."
+          variant="outlined"
+          onChange={onFilterTextChange}
+          size="small"
+        />
       </div>
       <div className="ag-theme-alpine">
         <AgGridReact
@@ -67,8 +78,6 @@ const Ranking = () => {
           defaultColDef={{ flex: 1 }}
           rowData={rowData}
           className="ranking-grid"
-          // pagination={true}
-          // paginationPageSize={10}
         />
         <p>
           There is <Badge color="success"> {numCountries}</Badge> rows

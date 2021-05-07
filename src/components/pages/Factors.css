@@ -16,6 +16,20 @@
   padding: 1vh;
 }
 
+.factors-title h1 {
+  font-size: 2rem;
+  padding-top: 3vh;
+}
+
+.search-div {
+  display: inline-flex;
+  margin-right: auto;
+  margin-left: 5%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: transparent;
+}
+
 .no-data-container {
   display: flex;
   justify-content: center;

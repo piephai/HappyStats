@@ -1,15 +1,45 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
-import Button from "./Button";
-import "./Navbar.css";
+import Link from "@material-ui/core/Link";
+import Button from "@material-ui/core/Button";
+// import "./Navbar.css";
 import { UserContext } from "../components/context/UserContext";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
+import { useHistory } from "react-router-dom";
+
+const useStyles = makeStyles((theme) => ({
+  "@global": {
+    ul: {
+      margin: 0,
+      padding: 0,
+      listStyle: "none",
+    },
+  },
+  appBar: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+  },
+  toolbar: {
+    flexWrap: "wrap",
+  },
+  toolbarTitle: {
+    flexGrow: 1,
+  },
+  link: {
+    margin: theme.spacing(1, 1.5),
+  },
+}));
 
 const Navbar = () => {
+  const classes = useStyles();
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const { user, setUser } = useContext(UserContext);
-  const [buttonText, setButtonText] = useState("SIGN UP");
-  const [linkToPage, setLinkToPage] = useState("/sign-up");
+  const [buttonText, setButtonText] = useState("SIGN IN");
+  const [linkToPage, setLinkToPage] = useState("/sign-in");
+  const history = useHistory();
 
   //Change the state of click to the opposite of what it is currently
   const handleClick = () => setClick(!click);
@@ -21,6 +51,7 @@ const Navbar = () => {
       setUser(null);
     }
     setClick(false);
+    history.push(`${linkToPage}`);
   };
 
   const buttonOption = () => {
@@ -28,8 +59,8 @@ const Navbar = () => {
       setButtonText("SIGN OUT");
       setLinkToPage("/home");
     } else {
-      setButtonText("SIGN UP");
-      setLinkToPage("/sign-up");
+      setButtonText("SIGN IN");
+      setLinkToPage("/sign-in");
     }
   };
 
@@ -41,82 +72,71 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    showButton();
-  }, []);
+  // useEffect(() => {
+  //   showButton();
+  // }, []);
 
   useEffect(() => {
     buttonOption();
   }, [user]);
 
-  window.addEventListener("resize", showButton);
+  // window.addEventListener("resize", showButton);
 
   return (
-    <>
-      <nav className="navbar">
-        <div className="navbar-container">
-          <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
-            Happy Statistics
-          </Link>
-          <div className="menu-icon" onClick={handleClick}>
-            <i className={click ? "fas fa-times" : "fas fa-bars"} />
-          </div>
-          <ul className={click ? "nav-menu active" : "nav-menu"}>
-            <li className="nav-item">
-              <Link to="/" className="nav-links" onClick={closeMobileMenu}>
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/ranking"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                Ranking
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/factors"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                Factors
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/search"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                Search
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to={linkToPage}
-                className="nav-links-mobile"
-                onClick={handleSignOut}
-              >
-                {buttonText}
-              </Link>
-            </li>
-          </ul>
-          {/* Only display the below button if screen size is greater than a certain amount */}
-          {button && (
-            <Button
-              buttonStyle="btnn--outline"
-              linkPage={linkToPage}
-              onClick={handleSignOut}
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar
+        position="static"
+        color="default"
+        elevation={0}
+        className={classes.appBar}
+      >
+        <Toolbar className={classes.toolbar}>
+          <Typography
+            variant="h5"
+            color="inherit"
+            noWrap
+            className={classes.toolbarTitle}
+          >
+            Happy Stats
+          </Typography>
+          <nav>
+            <Link
+              variant="button"
+              color="textPrimary"
+              onClick={() => history.push("/home")}
+              className={classes.link}
             >
-              {buttonText}
-            </Button>
-          )}
-        </div>
-      </nav>
-    </>
+              Home
+            </Link>
+            <Link
+              variant="button"
+              color="textPrimary"
+              onClick={() => history.push("/ranking")}
+              className={classes.link}
+            >
+              Ranking
+            </Link>
+            <Link
+              variant="button"
+              color="textPrimary"
+              onClick={() => history.push("/factors")}
+              className={classes.link}
+            >
+              Factors
+            </Link>
+          </nav>
+          <Button
+            onClick={handleSignOut}
+            color="primary"
+            variant="outlined"
+            className={classes.link}
+          >
+            {buttonText}
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </React.Fragment>
   );
 };
 

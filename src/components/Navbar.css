@@ -12,9 +12,9 @@
 
 .navbar-container {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
-  height: 8vh;
+  height: 5vh;
   max-width: 100%;
 }
 
@@ -41,7 +41,7 @@
   text-align: center;
   width: 60vw;
   justify-content: end;
-  margin-right: 2rem;
+  margin-right: 2vw;
 }
 
 .nav-item {

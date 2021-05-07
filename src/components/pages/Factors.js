@@ -7,19 +7,22 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Badge } from "reactstrap";
+import Typography from "@material-ui/core/Typography";
 import "./Factors.css";
 import DropdownMenu from "../Dropdown";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 
 const Factors = () => {
   const { user, setUser } = useContext(UserContext);
   const [numCountries, setNumCountries] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [error, setError] = useState(null);
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
   const [year, setYear] = useState("2020");
   const [showGrid, setShowGrid] = useState(false);
+  const [unauthorisedError, setUnauthorisedError] = useState(false);
 
   const years = ["2020", "2019", "2018", "2017", "2016", "2015"];
 
@@ -40,12 +43,11 @@ const Factors = () => {
     { headerName: "Trust", field: "trust", sortable: true, filter: true },
   ];
 
-  const checkGridHasData = () => {
-    if (rowData.length > 0) {
-      setShowGrid(true);
-    } else {
-      setShowGrid(false);
+  const handleErrors = (response) => {
+    if (!response.ok) {
+      throw new Error(response.status);
     }
+    return response;
   };
 
   const onGridReady = (params) => {
@@ -60,11 +62,8 @@ const Factors = () => {
   };
 
   useEffect(() => {
-    checkGridHasData();
-  }, [rowData]);
-
-  useEffect(() => {
     if (user) {
+      setUnauthorisedError(false);
       fetch(`http://131.181.190.87:3000/factors/${year}`, {
         method: "GET",
         headers: {
@@ -72,6 +71,7 @@ const Factors = () => {
           Authorization: `${user.token_type} ${user.token}`,
         },
       })
+        .then(handleErrors)
         .then((res) => res.json())
         .then((data) =>
           data.map((factors) => {
@@ -89,29 +89,58 @@ const Factors = () => {
             };
           })
         )
-        .then((factors) => setRowData(factors));
+        .then((factors) => setRowData(factors))
+        .catch((err) => {
+          if (err.message === "400") {
+            setShowGrid(false);
+            setError(`Invalid year format. Format but must yyyy`);
+          } else {
+            setUnauthorisedError(true);
+            setShowGrid(false);
+            setError(`Authorisation header (Bearer token) not found`);
+          }
+        })
+        .finally(() => {
+          setShowGrid(true);
+        });
+    } else {
+      setShowGrid(false);
+      setUnauthorisedError(true);
+      setError(`Authorisation header (Bearer token) not found`);
     }
-  }, [year]);
+  }, [year, showGrid]);
 
   return (
     <div className="factors-container">
       {showGrid && (
-        <div className="factors-title">
-          <h1>Country Happiness Factors by Year </h1>
-          <div className="searchDiv">
-            <input
-              className="searchBox"
-              type="search"
-              placeholder=" search something..."
+        <>
+          <div className="factors-title">
+            <Typography
+              component="h1"
+              variant="h2"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              World Happiness Factors
+            </Typography>
+          </div>
+          <div className="search-div">
+            <TextField
+              id="outlined-basic"
+              label="Search something..."
+              variant="outlined"
               onChange={onFilterTextChange}
+              size="small"
             />
             <DropdownMenu
+              className="year-dropdown"
               title={years[0]}
               items={years}
               onSelection={setYear}
             />
           </div>
-        </div>
+        </>
       )}
 
       {showGrid && (
@@ -130,17 +159,76 @@ const Factors = () => {
       )}
       {!showGrid && (
         <div className="no-data-container">
-          <div className="no-data-content">
-            <h1>Oops!</h1>
-            <h3>
-              The content of this page is only visible for when you are logged
-              in.
-            </h3>
-            <h3>Please click the button below to log in</h3>
-            <Link to="/sign-in" className="sign-in-btn">
-              <Button variant="outline-primary">Sign In</Button>
-            </Link>
-          </div>
+          {unauthorisedError ? (
+            <div className="no-data-content">
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                Oops
+              </Typography>
+
+              <Typography
+                component="h3"
+                variant="h4"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                The content of this page is only visible for when you are signed
+                in.
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                Please sign in to view the content of this page
+              </Typography>
+            </div>
+          ) : (
+            <div className="no-data-content">
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                Oops
+              </Typography>
+
+              <Typography
+                component="h3"
+                variant="h4"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                It seems like the year format was incorrect
+              </Typography>
+              <Typography
+                component="h3"
+                variant="h4"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+                padding-top="2px"
+              >
+                Please make sure the year format is yyyy
+              </Typography>
+            </div>
+          )}
         </div>
       )}
     </div>

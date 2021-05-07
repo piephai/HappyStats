@@ -6,11 +6,17 @@
   width: 100%;
 }
 
-.searchDiv {
-  display: flex;
+.ranking-title h1 {
+  font-size: 2rem;
+  padding-top: 3vh;
+}
+
+.search-div {
+  display: inline-flex;
   background-color: #dedede;
-  padding: 5px;
-  justify-content: left;
+  margin-right: auto;
+  margin-left: 5%;
+
   flex-direction: row;
 }
 
