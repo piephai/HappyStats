@@ -9,6 +9,7 @@
 .ranking-title h1 {
   font-size: 2rem;
   padding-top: 3vh;
+  padding-bottom: 3vh;
 }
 
 .search-div {
@@ -23,4 +24,8 @@
 .ag-theme-alpine {
   width: 90%;
   height: 55vh;
+}
+
+.bar-chart-container {
+  padding-top: 5vh;
 }

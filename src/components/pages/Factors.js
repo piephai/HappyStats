@@ -128,16 +128,17 @@ const Factors = () => {
           <div className="search-div">
             <TextField
               id="outlined-basic"
-              label="Search something..."
+              label="Search table..."
               variant="outlined"
               onChange={onFilterTextChange}
               size="small"
             />
             <DropdownMenu
               className="year-dropdown"
-              title={years[0]}
+              selection={year}
               items={years}
               onSelection={setYear}
+              menuTitle="Year"
             />
           </div>
         </>
