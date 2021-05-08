@@ -11,55 +11,11 @@ const FactorChart = (props) => {
   //   const [lineChart, setLineChart] = useState(true);
 
   const setAxis = () => {
-    if (props.xData && props.yData) {
-      //Create a new array of data with only 10 items maximum
-      //   let countries = props.data.slice(0, 10).map((item) => {
-      //     return item.country;
-      //   });
-      //   let years = props.data.slice(0, 10).map((item) => {
-      //     return item.year;
-      //   });
+    if (props.xData && props.yData && props.chartTitle) {
       setXAxis(props.xData);
       setYAxis(props.yData);
       setChartTitle(props.chartTitle);
-      //   let score = props.data.slice(0, 10).map((item) => {
-      //     return item.score;
-      //   });
-      //   if (props.data.length > 0) {
-      //     let valuesAlreadySeen = [];
-      //     let count = 0;
-
-      //     //Check to see if there are duplicate values
-      //     for (let i = 0; i < countries.length; i++) {
-      //       if (valuesAlreadySeen.indexOf(countries[i]) !== -1) {
-      //         break;
-      //       }
-      //       count++;
-      //       valuesAlreadySeen.push(countries[i]);
-      //     }
-      //     //When there are no duplicate values then set title to top 10 happiest countries and xaxis to be countries
-      //     if (count > 1) {
-      //       setCountry("Top 10 Happiest Countries");
-      //       setXAxis(countries);
-
-      //       setLineChart(false);
-      //     }
-      //     //When there is even one duplicate value then set the title to the first country. This happens when a user fetch for only one country
-      //     else {
-      //       console.log("Where we got up to");
-      //       setCountry(countries[0]);
-      //       setXAxis(years);
-      //       setLineChart(true);
-      //     }
     }
-    //If the length is not greater than 1 then that would mean that there is only one row of data thus it is assumed that the user fetched for only one country
-    //   else {
-    //     setCountry(countries[0]);
-    //     setXAxis(years);
-    //     setLineChart(true);
-    //   }
-
-    //   setYAxis(score);
   };
 
   const setData = () => {
