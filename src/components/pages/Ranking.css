@@ -29,3 +29,12 @@
 .bar-chart-container {
   padding-top: 5vh;
 }
+
+.no-data-content {
+  display: inline-flex;
+  flex-direction: column;
+  float: left;
+  padding-top: 5vh;
+  align-items: center;
+  justify-content: center;
+}

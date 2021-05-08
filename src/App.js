@@ -29,19 +29,6 @@ function App() {
         </UserContext.Provider>
       </Router>
     </>
-    // <Router>
-    //   <div className="App">
-
-    //     <div className="content">
-    //       <Switch>
-    //         <Route exact path="/">
-    //           <LandingPage />
-    //         </Route>
-    //         <Route path="/home" exact component={Home} />
-    //       </Switch>
-    //     </div>
-    //   </div>
-    // </Router>
   );
 }
 

@@ -1,9 +1,9 @@
 // import { _ } from "ag-grid-community";
 import { ThreeDRotationRounded } from "@material-ui/icons";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 
-const BarChart = (props) => {
+const BarChartRanking = (props) => {
   const [newData, setNewData] = useState(null);
   const [xAxis, setXAxis] = useState(null);
   const [yAxis, setYAxis] = useState(null);
@@ -13,52 +13,56 @@ const BarChart = (props) => {
 
   const setAxis = () => {
     if (props.data) {
+      //Create a new array of data with only 10 items maximum
+      let countries = props.data.slice(0, 10).map((item) => {
+        return item.country;
+      });
+      let years = props.data.slice(0, 10).map((item) => {
+        return item.year;
+      });
+      let score = props.data.slice(0, 10).map((item) => {
+        return item.score;
+      });
       if (props.data.length > 0) {
         let valuesAlreadySeen = [];
         let count = 0;
-        for (let i = 0; i < props.data.length; i++) {
-          if (valuesAlreadySeen.indexOf(props.data[i].country) !== -1) {
+
+        //Check to see if there are duplicate values
+        for (let i = 0; i < countries.length; i++) {
+          if (valuesAlreadySeen.indexOf(countries[i]) !== -1) {
             break;
           }
           count++;
-          valuesAlreadySeen.push(props.data[i].country);
+          valuesAlreadySeen.push(countries[i]);
         }
+        //When there are no duplicate values then set title to top 10 happiest countries and xaxis to be countries
         if (count > 1) {
           setCountry("Top 10 Happiest Countries");
-          setXAxis(
-            props.data.slice(0, 10).map((item) => {
-              return item.country;
-            })
-          );
+          setXAxis(countries);
+
           setLineChart(false);
-        } else {
-          setCountry(props.data[0].country);
-          setXAxis(
-            props.data.slice(0, 10).map((item) => {
-              return item.year;
-            })
-          );
+        }
+        //When there is even one duplicate value then set the title to the first country. This happens when a user fetch for only one country
+        else {
+          console.log("Where we got up to");
+          setCountry(countries[0]);
+          setXAxis(years);
           setLineChart(true);
         }
-      } else {
-        setCountry(props.data[0].country);
-        setXAxis(
-          props.data.slice(0, 10).map((item) => {
-            return item.year;
-          })
-        );
+      }
+      //If the length is not greater than 1 then that would mean that there is only one row of data thus it is assumed that the user fetched for only one country
+      else {
+        setCountry(countries[0]);
+        setXAxis(years);
         setLineChart(true);
       }
 
-      setYAxis(
-        props.data.slice(0, 10).map((item) => {
-          return item.score;
-        })
-      );
+      setYAxis(score);
     }
   };
 
   const setData = () => {
+    //Reverse the array so that it display from the lowest value first
     let xAxis_reversed = xAxis.reverse();
     let yAxis_reversed = yAxis.reverse();
     const data = {
@@ -108,11 +112,14 @@ const BarChart = (props) => {
     setOptions(options);
   };
 
+  //This use effect will happen everytime data changes in its parent component
   useEffect(() => {
-    setAxis();
-    // props.barChange(true);
+    if (props.data.length > 0) {
+      setAxis();
+    }
   }, [props.data]);
 
+  //This use effect will only happen when xAxis and yAxis changes. This is done to reload the components after the values had changed
   useEffect(() => {
     if (xAxis && yAxis) {
       setData();
@@ -130,4 +137,4 @@ const BarChart = (props) => {
   );
 };
 
-export default BarChart;
+export default BarChartRanking;

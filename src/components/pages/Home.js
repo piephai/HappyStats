@@ -1,11 +1,11 @@
 import React from "react";
-import BarChart from "../BarChart";
+import BarChart from "../RankingChart";
 
 const Home = () => {
   return (
-    <>
-      <BarChart />
-    </>
+    <div>
+      <h1>Home</h1>
+    </div>
   );
 };
 

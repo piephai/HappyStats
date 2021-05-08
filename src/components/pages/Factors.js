@@ -12,6 +12,7 @@ import "./Factors.css";
 import DropdownMenu from "../Dropdown";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
+import FactorChart from "../FactorsChart";
 
 const Factors = () => {
   const { user, setUser } = useContext(UserContext);
@@ -145,18 +146,82 @@ const Factors = () => {
       )}
 
       {showGrid && (
-        <div className="ag-theme-alpine">
-          <AgGridReact
-            columnDefs={columns}
-            onGridReady={onGridReady}
-            defaultColDef={{ flex: 3 }}
-            rowData={rowData}
-            className="factors-grid"
-          />
-          <p>
-            There is <Badge color="success"> {numCountries}</Badge> rows
-          </p>
-        </div>
+        <>
+          <div className="ag-theme-alpine">
+            <AgGridReact
+              columnDefs={columns}
+              onGridReady={onGridReady}
+              defaultColDef={{ flex: 3 }}
+              rowData={rowData}
+              className="factors-grid"
+            />
+            <p>
+              There is <Badge color="success"> {numCountries}</Badge> rows
+            </p>
+          </div>
+          <div className="chart-container">
+            <FactorChart
+              data={rowData}
+              chartTitle="Economic Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.economy;
+              })}
+            />
+            <FactorChart
+              data={rowData}
+              chartTitle="Family Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.family;
+              })}
+            />
+            <FactorChart
+              data={rowData}
+              chartTitle="Health Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.health;
+              })}
+            />
+            <FactorChart
+              data={rowData}
+              chartTitle="Freedom Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.freedom;
+              })}
+            />
+            <FactorChart
+              data={rowData}
+              chartTitle="Generosity Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.freedom;
+              })}
+            />
+            <FactorChart
+              data={rowData}
+              chartTitle="Trust Factor"
+              xData={rowData.slice(0, 10).map((item) => {
+                return item.country;
+              })}
+              yData={rowData.slice(0, 10).map((item) => {
+                return item.freedom;
+              })}
+            />
+          </div>
+        </>
       )}
       {!showGrid && (
         <div className="no-data-container">
