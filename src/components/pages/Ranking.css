@@ -21,8 +21,8 @@
   flex-direction: row;
 }
 
-.ag-theme-alpine {
-  width: 90%;
+.grid-holder {
+  width: 100%;
   height: 55vh;
 }
 

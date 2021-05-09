@@ -1,4 +1,3 @@
-import { ThreeDRotationRounded } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
@@ -8,9 +7,10 @@ const FactorChart = (props) => {
   const [yAxis, setYAxis] = useState(null);
   const [options, setOptions] = useState(null);
   const [chartTitle, setChartTitle] = useState(null);
-  //   const [lineChart, setLineChart] = useState(true);
 
+  //Set the axis for the charts
   const setAxis = () => {
+    //Only try and set the axis if all the properties are not null
     if (props.xData && props.yData && props.chartTitle) {
       setXAxis(props.xData);
       setYAxis(props.yData);
@@ -29,11 +29,10 @@ const FactorChart = (props) => {
 
       datasets: [
         {
+          //Change it to a horizontal bar graph
           label: chartTitle,
-          aixs: "y",
-          data: yAxis_reversed.map((item) => {
-            return item;
-          }),
+          axis: "y",
+          data: yAxis_reversed,
           fill: false,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
@@ -62,7 +61,7 @@ const FactorChart = (props) => {
     setOptions(options);
   };
 
-  //This use effect will happen everytime data changes in its parent component
+  //This use effect will happen everytime xdata and ydata changes in its parent component
   useEffect(() => {
     if (props.data.length > 0) {
       setAxis();

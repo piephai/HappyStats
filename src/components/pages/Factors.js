@@ -1,18 +1,16 @@
-import React, { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import React, { useContext, useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Badge } from "reactstrap";
 import Typography from "@material-ui/core/Typography";
-import "./Factors.css";
-import DropdownMenu from "../Dropdown";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+
+import { UserContext } from "../context/UserContext";
+import DropdownMenu from "../Dropdown";
 import FactorChart from "../FactorsChart";
+import "./Factors.css";
 
 const Factors = () => {
   const { user, setUser } = useContext(UserContext);
@@ -28,22 +26,73 @@ const Factors = () => {
   const years = ["2020", "2019", "2018", "2017", "2016", "2015"];
 
   const columns = [
-    { headerName: "Rank", field: "rank", sortable: true, filter: true },
-    { headerName: "Country", field: "country", sortable: true, filter: true },
-    { headerName: "Score", field: "score", sortable: true, filter: true },
-    { headerName: "Economy", field: "economy", sortable: true, filter: true },
-    { headerName: "Family", field: "family", sortable: true, filter: true },
-    { headerName: "Health", field: "health", sortable: true, filter: true },
-    { headerName: "Freedom", field: "freedom", sortable: true, filter: true },
+    {
+      headerName: "Rank",
+      field: "rank",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+      maxWidth: 90,
+    },
+    {
+      headerName: "Country",
+      field: "country",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
+    {
+      headerName: "Score",
+      field: "score",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
+    {
+      headerName: "Economy",
+      field: "economy",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
+    {
+      headerName: "Family",
+      field: "family",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
+    {
+      headerName: "Health",
+      field: "health",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
+    {
+      headerName: "Freedom",
+      field: "freedom",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
     {
       headerName: "Generosity",
       field: "generosity",
       sortable: true,
       filter: true,
+      minWidth: 70,
     },
-    { headerName: "Trust", field: "trust", sortable: true, filter: true },
+    {
+      headerName: "Trust",
+      field: "trust",
+      sortable: true,
+      filter: true,
+      minWidth: 70,
+    },
   ];
 
+  //If the response is not okay then throw an error with the response status code
   const handleErrors = (response) => {
     if (!response.ok) {
       throw new Error(response.status);
@@ -51,17 +100,27 @@ const Factors = () => {
     return response;
   };
 
+  //Access the AG grid API to update the current grid
   const onGridReady = (params) => {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
     setNumCountries(params.api.getDisplayedRowCount());
+    onFirstDataRendered();
   };
 
+  //Update the grid api filter
   const onFilterTextChange = (e) => {
     gridApi.setQuickFilter(e.target.value);
     setNumCountries(gridApi.getDisplayedRowCount());
   };
 
+  const onFirstDataRendered = (params) => {
+    if (params) {
+      params.api.sizeColumnsToFit();
+    }
+  };
+
+  //Rerender when the year or showGrid value changes
   useEffect(() => {
     if (user) {
       setUnauthorisedError(false);
@@ -72,6 +131,7 @@ const Factors = () => {
           Authorization: `${user.token_type} ${user.token}`,
         },
       })
+        //First check to see if the response was successful
         .then(handleErrors)
         .then((res) => res.json())
         .then((data) =>
@@ -147,17 +207,19 @@ const Factors = () => {
 
       {showGrid && (
         <>
-          <div className="ag-theme-alpine">
-            <AgGridReact
-              columnDefs={columns}
-              onGridReady={onGridReady}
-              defaultColDef={{ flex: 3 }}
-              rowData={rowData}
-              className="factors-grid"
-            />
-            <p>
-              There is <Badge color="success"> {numCountries}</Badge> rows
-            </p>
+          <div className="grid-holder">
+            <div className="ag-theme-alpine">
+              <AgGridReact
+                columnDefs={columns}
+                onGridReady={onGridReady}
+                defaultColDef={{ resizable: true, flex: 3 }}
+                rowData={rowData}
+                className="factors-grid"
+                onFirstDataRendered={onFirstDataRendered}
+                pagination={true}
+                paginationPageSize={10}
+              />
+            </div>
           </div>
           <div className="chart-container">
             <FactorChart

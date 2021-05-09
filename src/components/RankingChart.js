@@ -1,5 +1,3 @@
-// import { _ } from "ag-grid-community";
-import { ThreeDRotationRounded } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 

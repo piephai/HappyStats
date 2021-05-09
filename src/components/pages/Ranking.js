@@ -2,19 +2,16 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Badge } from "reactstrap";
 import Typography from "@material-ui/core/Typography";
-import "./Ranking.css";
 import TextField from "@material-ui/core/TextField";
+
 import DropdownMenu from "../Dropdown";
-import Paper from "@material-ui/core/Paper";
-import { Chart } from "chart.js";
+import "./Ranking.css";
 import BarChart from "../RankingChart";
 
 const Ranking = () => {
-  const [numCountries, setNumCountries] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
   const [gridColumnApi, setGridColumnApi] = useState(null);
@@ -42,12 +39,16 @@ const Ranking = () => {
   function onGridReady(params) {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
-    setNumCountries(params.api.getDisplayedRowCount());
   }
 
   const onFilterTextChange = (e) => {
     gridApi.setQuickFilter(e.target.value);
-    setNumCountries(gridApi.getDisplayedRowCount());
+  };
+
+  const onFirstDataRendered = (params) => {
+    if (params) {
+      params.api.sizeColumnsToFit();
+    }
   };
 
   useEffect(() => {
@@ -243,17 +244,17 @@ const Ranking = () => {
               />
             </div>
 
-            <div className="ag-theme-alpine">
-              <AgGridReact
-                columnDefs={columns}
-                onGridReady={onGridReady}
-                defaultColDef={{ flex: 1 }}
-                rowData={rowData}
-                className="ranking-grid"
-              />
-              <p>
-                There is <Badge color="success"> {numCountries}</Badge> rows
-              </p>
+            <div className="grid-holder">
+              <div className="ag-theme-alpine">
+                <AgGridReact
+                  columnDefs={columns}
+                  onGridReady={onGridReady}
+                  defaultColDef={{ flex: 1 }}
+                  rowData={rowData}
+                  className="ranking-grid"
+                  onFirstDataRendered={onFirstDataRendered}
+                />
+              </div>
             </div>
 
             <div className="bar-chart-container">

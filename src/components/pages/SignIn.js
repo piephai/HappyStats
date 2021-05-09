@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import { useLastLocation } from "react-router-last-location";
+import { useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -10,11 +12,11 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { UserContext } from "../context/UserContext";
-import { useHistory } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Paper from "@material-ui/core/paper";
+
+import { UserContext } from "../context/UserContext";
 import FlowerImage from "../../images/flower-image.jpg";
 
 const Alert = (props) => {
@@ -64,16 +66,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//Handle sign-in
 const SignIn = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const lastLocation = useLastLocation();
+
   const [email, setEmail] = useState("");
   const [passWord, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const history = useHistory();
   const [errorOpen, setErrorOpen] = useState(false);
 
+  //Handle errors by checking if the response was okay if not throw an error with the response status code
   const handleErrors = (response) => {
     if (!response.ok) {
       throw new Error(response.status);
@@ -81,6 +87,7 @@ const SignIn = () => {
     return response;
   };
 
+  //If a user select close on the error message that pops up on the bottom of the screen
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -104,7 +111,18 @@ const SignIn = () => {
       .then((data) => {
         setUser(data);
       })
-      .then(() => history.goBack())
+      .then(() => {
+        //Check if the previous route was sign-up if it is then go back to home instead
+        if (lastLocation.pathname == "/sign-up") {
+          history.push("/home");
+        }
+        //If previous route was nto sign-up then go back to the previous route
+        else {
+          history.goBack();
+        }
+      })
+      //If response status was 401 then throw the error of incorrect email
+      //or password otherwise throw the error message of incomplete forms
       .catch((err) => {
         if (err.message === "401") {
           setErrorOpen(true);
@@ -175,7 +193,7 @@ const SignIn = () => {
             <Grid container>
               <Grid item>
                 <Link
-                  href="/sign-up"
+                  onClick={() => history.push("/sign-up")}
                   variant="body2"
                   className={classes.dontHaveAnAccount}
                   fontWeight="boulder"

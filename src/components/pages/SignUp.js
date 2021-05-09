@@ -13,9 +13,9 @@ import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import SeaImage from "../../images/sea-image.jpg";
 import Paper from "@material-ui/core/paper";
-import { CenterFocusStrong } from "@material-ui/icons";
+
+import SeaImage from "../../images/sea-image.jpg";
 
 /*Next thing to do is to call this with several different APIs. Should be the same request with login and registration*/
 
@@ -191,7 +191,7 @@ const SignUp = () => {
             >
               <Grid item>
                 <Link
-                  href="/sign-in"
+                  onClick={() => history.push("/sign-in")}
                   variant="body2"
                   className={classes.textDesign}
                 >
