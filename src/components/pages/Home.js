@@ -1,5 +1,4 @@
 import React from "react";
-import BarChart from "../RankingChart";
 import SmilingImage from "../../images/smiling-people.jpeg";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/paper";
