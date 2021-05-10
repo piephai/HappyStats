@@ -14,8 +14,6 @@ import { UserContext } from "./components/context/UserContext";
 function App() {
   const [user, setUser] = useState(null);
 
-  // const providerToken = useMemo(() => ({ user, setUser }), [user, setUser]);
-
   return (
     <>
       <Router>

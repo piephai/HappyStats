@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/paper";
 import Typography from "@material-ui/core/Typography";
 
-
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: "no-repeat",
     height: "90vh",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     fontSize: "6rem",
     textShadow:
-        " 0.02em 0 black,       0 0.02em black,   -0.02em 0 black,       0 -0.02em black,        -0.02em -0.02em black,       -0.02em 0.02em black,       0.02em -0.02em black,       0.02em 0.02em black;"
+      " 0.02em 0 black,       0 0.02em black,   -0.02em 0 black,       0 -0.02em black,        -0.02em -0.02em black,       -0.02em 0.02em black,       0.02em -0.02em black,       0.02em 0.02em black;",
   },
 }));
 
@@ -35,16 +34,11 @@ const Home = () => {
   const classes = useStyles();
   return (
     <Paper className={classes.container}>
-       <Typography
-            component="h1"
-            variant="h2"
-            className={classes.textDesign}
-          >
-            Happy Statistics
-          </Typography>
-
-      </Paper>
-  )
-}
+      <Typography component="h1" variant="h2" className={classes.textDesign}>
+        Happy Statistics
+      </Typography>
+    </Paper>
+  );
+};
 
 export default Home;

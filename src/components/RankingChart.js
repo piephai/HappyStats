@@ -11,7 +11,7 @@ const BarChartRanking = (props) => {
 
   const setAxis = () => {
     if (props.data) {
-      //Create a new array of data with only 10 items maximum
+      //Create a new array of data with only the first ten items from props.data
       let countries = props.data.slice(0, 10).map((item) => {
         return item.country;
       });

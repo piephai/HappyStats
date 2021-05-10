@@ -14,7 +14,6 @@ import "./Factors.css";
 
 const Factors = () => {
   const { user, setUser } = useContext(UserContext);
-  const [numCountries, setNumCountries] = useState(null);
   const [rowData, setRowData] = useState([]);
   const [error, setError] = useState(null);
   const [gridApi, setGridApi] = useState(null);
@@ -22,6 +21,7 @@ const Factors = () => {
   const [year, setYear] = useState("2020");
   const [showGrid, setShowGrid] = useState(false);
   const [unauthorisedError, setUnauthorisedError] = useState(false);
+  const [resolution, setResolution] = useState(null);
 
   const years = ["2020", "2019", "2018", "2017", "2016", "2015"];
 
@@ -103,14 +103,12 @@ const Factors = () => {
   const onGridReady = (params) => {
     setGridApi(params.api);
     setGridColumnApi(params.columnApi);
-    setNumCountries(params.api.getDisplayedRowCount());
     onFirstDataRendered();
   };
 
   //Update the grid api filter
   const onFilterTextChange = (e) => {
     gridApi.setQuickFilter(e.target.value);
-    setNumCountries(gridApi.getDisplayedRowCount());
   };
 
   const onFirstDataRendered = (params) => {
@@ -150,23 +148,38 @@ const Factors = () => {
           })
         )
         .then((factors) => setRowData(factors))
+        //Catch the error that was thrown by the handle error function
         .catch((err) => {
           if (err.message === "400") {
             setShowGrid(false);
-            setError(`Invalid year format. Format but must yyyy`);
+            setError(`Invalid year format`);
+            setResolution(`Please check your format is yyyy`);
+          }
+          if (err.message === "401") {
+            setUnauthorisedError(true);
+            setShowGrid(false);
+            setError(
+              `The content of this page is only visible for when you are signed in`
+            );
+            setResolution(`Please sign in to view the content of this page`);
           } else {
             setUnauthorisedError(true);
             setShowGrid(false);
-            setError(`Authorisation header (Bearer token) not found`);
+            setError(`It seems like you may not be connected to the internet`);
+            setResolution(`Please check your connection and try again`);
           }
         })
         .finally(() => {
+          //Show the grid if the promise is fulfilled
           setShowGrid(true);
         });
     } else {
       setShowGrid(false);
       setUnauthorisedError(true);
-      setError(`Authorisation header (Bearer token) not found`);
+      setError(
+        `The content of this page is only visible for when you are signed in`
+      );
+      setResolution(`Please sign in to view the content of this page`);
     }
   }, [year, showGrid]);
 
@@ -203,7 +216,7 @@ const Factors = () => {
           </div>
         </>
       )}
-
+      {/* Only show the grid if the user is logged in and there is no error */}
       {showGrid && (
         <>
           <div className="grid-holder">
@@ -219,6 +232,7 @@ const Factors = () => {
             </div>
           </div>
           <div className="chart-container">
+            {/* Pass in data for each Factor chart. Only pass in the top 10 rows which are sorted by its score  */}
             <FactorChart
               data={rowData}
               chartTitle="Economic Factor"
@@ -282,8 +296,10 @@ const Factors = () => {
           </div>
         </>
       )}
+      {/* If there is an error displaying the grid or if the user is not logged in then display an error screen */}
       {!showGrid && (
         <div className="no-data-container">
+          {/* Check if it the error was an authorisation error if it is then appripriately display an authorisation error page*/}
           {unauthorisedError ? (
             <div className="no-data-content">
               <Typography
@@ -305,8 +321,7 @@ const Factors = () => {
                 gutterBottom
                 padding-top="2px"
               >
-                The content of this page is only visible for when you are signed
-                in.
+                {error}
               </Typography>
               <Typography
                 component="h3"
@@ -316,7 +331,7 @@ const Factors = () => {
                 gutterBottom
                 padding-top="2px"
               >
-                Please sign in to view the content of this page
+                {resolution}
               </Typography>
             </div>
           ) : (

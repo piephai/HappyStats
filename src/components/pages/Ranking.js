@@ -297,7 +297,7 @@ const Ranking = () => {
               gutterBottom
               padding-top="2px"
             >
-              Please check your connection and refresh page
+              Please check your connection and try again
             </Typography>
           </div>
         )}
