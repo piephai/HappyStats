@@ -69,6 +69,7 @@ const Ranking = () => {
           initialCountries = data.map((dataCountry) => {
             return dataCountry;
           });
+          //Insert "All" at the front of the array
           initialCountries.unshift("All");
           setCountries(initialCountries);
         })

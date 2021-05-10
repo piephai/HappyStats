@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     fontSize: "6rem",
     textShadow:
-      " 0.02em 0 black,       0 0.02em black,   -0.02em 0 black,       0 -0.02em black,        -0.02em -0.02em black,       -0.02em 0.02em black,       0.02em -0.02em black,       0.02em 0.02em black;",
+      "0.02em 0 black, 0 0.02em black, -0.02em 0 black, 0 -0.02em black, -0.02em -0.02em black, -0.02em 0.02em black, 0.02em -0.02em black, 0.02em 0.02em black;",
   },
 }));
 

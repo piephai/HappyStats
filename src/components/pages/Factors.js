@@ -152,11 +152,6 @@ const Factors = () => {
         .then((factors) => setRowData(factors))
         //Catch the error that was thrown by the handle error function
         .catch((err) => {
-          if (err.message === "400") {
-            setShowGrid(false);
-            setError(`Invalid year format`);
-            setResolution(`Please check your format is yyyy`);
-          }
           if (err.message === "401") {
             setUnauthorisedError(true);
             setShowGrid(false);
@@ -165,7 +160,6 @@ const Factors = () => {
             );
             setResolution(`Please sign in to view the content of this page`);
           } else {
-            setUnauthorisedError(true);
             setShowGrid(false);
             setError(`It seems like you may not be connected to the internet`);
             setResolution(`Please check your connection and try again`);
@@ -370,7 +364,7 @@ const Factors = () => {
                 gutterBottom
                 padding-top="2px"
               >
-                It seems like the year format was incorrect
+                {error}
               </Typography>
               <Typography
                 component="h3"
@@ -380,7 +374,7 @@ const Factors = () => {
                 gutterBottom
                 padding-top="2px"
               >
-                Please make sure the year format is yyyy
+                {resolution}
               </Typography>
             </div>
           )}
