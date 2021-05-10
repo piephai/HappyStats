@@ -32,7 +32,6 @@ const Factors = () => {
       sortable: true,
       filter: true,
       minWidth: 70,
-      maxWidth: 90,
     },
     {
       headerName: "Country",
@@ -216,8 +215,6 @@ const Factors = () => {
                 rowData={rowData}
                 className="factors-grid"
                 onFirstDataRendered={onFirstDataRendered}
-                pagination={true}
-                paginationPageSize={10}
               />
             </div>
           </div>

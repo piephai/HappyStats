@@ -1,0 +1,17 @@
+
+.homeBackground{
+    display: "flex";
+    height: "90vh";
+};
+
+.homeTitle{
+    display:"inline";
+    color:"black";
+    display: "flex";
+    width: "20%";
+    height: "20%";
+};
+
+.container {
+    
+}
