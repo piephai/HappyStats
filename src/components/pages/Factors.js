@@ -22,8 +22,10 @@ const Factors = () => {
   const [showGrid, setShowGrid] = useState(false);
   const [unauthorisedError, setUnauthorisedError] = useState(false);
   const [resolution, setResolution] = useState(null);
+  const [colourIntensity, setColourIntensity] = useState("0.7");
 
   const years = ["2020", "2019", "2018", "2017", "2016", "2015"];
+  const colourIntensities = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
 
   const columns = [
     {
@@ -213,6 +215,13 @@ const Factors = () => {
               onSelection={setYear}
               menuTitle="Year"
             />
+            <DropdownMenu
+              className="colour-intensity"
+              selection={colourIntensity}
+              items={colourIntensities}
+              onSelection={setColourIntensity}
+              menuTitle="Chart Transparency"
+            />
           </div>
         </>
       )}
@@ -242,6 +251,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.economy;
               })}
+              colourIntensity={colourIntensity}
             />
             <FactorChart
               data={rowData}
@@ -252,6 +262,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.family;
               })}
+              colourIntensity={colourIntensity}
             />
             <FactorChart
               data={rowData}
@@ -262,6 +273,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.health;
               })}
+              colourIntensity={colourIntensity}
             />
             <FactorChart
               data={rowData}
@@ -272,6 +284,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.freedom;
               })}
+              colourIntensity={colourIntensity}
             />
             <FactorChart
               data={rowData}
@@ -282,6 +295,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.freedom;
               })}
+              colourIntensity={colourIntensity}
             />
             <FactorChart
               data={rowData}
@@ -292,6 +306,7 @@ const Factors = () => {
               yData={rowData.slice(0, 10).map((item) => {
                 return item.freedom;
               })}
+              colourIntensity={colourIntensity}
             />
           </div>
         </>

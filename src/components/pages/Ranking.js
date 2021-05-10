@@ -20,8 +20,11 @@ const Ranking = () => {
   const [countries, setCountries] = useState([]);
   const [showGrid, setShowGrid] = useState(false);
   const [error, setError] = useState(null);
+  const [colourIntensity, setColourIntensity] = useState("0.7");
 
   const years = ["All", "2020", "2019", "2018", "2017", "2016", "2015"];
+  const colourIntensities = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
+
   const columns = [
     { headerName: "Rank", field: "rank", sortable: true, filter: true },
     { headerName: "Country", field: "country", sortable: true, filter: true },
@@ -242,6 +245,13 @@ const Ranking = () => {
                 onSelection={setCountry}
                 menuTitle="Country"
               />
+              <DropdownMenu
+                className="colour-intensity"
+                selection={colourIntensity}
+                items={colourIntensities}
+                onSelection={setColourIntensity}
+                menuTitle="Chart Transparency"
+              />
             </div>
 
             <div className="grid-holder">
@@ -263,6 +273,7 @@ const Ranking = () => {
                 xType="country"
                 yType="score"
                 chartTitle="Top 10 Happiest Countries"
+                colourIntensity={colourIntensity}
               />
             </div>
           </>

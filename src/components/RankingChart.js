@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
+import Dropdown from "./Dropdown";
 
 const BarChartRanking = (props) => {
   const [newData, setNewData] = useState(null);
@@ -76,12 +77,12 @@ const BarChartRanking = (props) => {
           }),
           fill: false,
           backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
+            `rgba(255, 99, 132, ${props.colourIntensity})`,
+            `rgba(54, 162, 235, ${props.colourIntensity})`,
+            `rgba(255, 206, 86, ${props.colourIntensity})`,
+            `rgba(75, 192, 192, ${props.colourIntensity})`,
+            `rgba(153, 102, 255, ${props.colourIntensity})`,
+            `rgba(255, 159, 64, ${props.colourIntensity})`,
           ],
           borderColor: [
             "rgba(255, 99, 132, 1)",
@@ -115,7 +116,7 @@ const BarChartRanking = (props) => {
     if (props.data.length > 0) {
       setAxis();
     }
-  }, [props.data]);
+  }, [props.data, props.colourIntensity]);
 
   //This use effect will only happen when xAxis and yAxis changes. This is done to reload the components after the values had changed
   useEffect(() => {
