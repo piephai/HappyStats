@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/paper";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-  container: {
+  containerHome: {
     display: "flex",
     backgroundImage: `url(${SmilingImage})`,
     backgroundSize: "cover",
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
   return (
-    <Paper className={classes.container}>
+    <Paper className={classes.containerHome}>
       <Typography component="h1" variant="h2" className={classes.textDesign}>
         Happy Statistics
       </Typography>
